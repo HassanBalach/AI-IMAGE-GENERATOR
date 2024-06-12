@@ -3,7 +3,7 @@ import { IBM_Plex_Mono } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 import { cn } from "@/lib/utils";
-import { Variable } from "lucide-react";
+
 
 const IBMPlex = IBM_Plex_Mono({ 
   subsets: ["latin"],
