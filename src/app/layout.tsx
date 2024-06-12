@@ -15,6 +15,14 @@ export const metadata: Metadata = {
   title: "Imaginify",
   description: "AI-powered AI Generator",
 };
+ 
+const clerkPublishableKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
+
+if (!clerkPublishableKey) {
+  throw new Error("Missing Clerk publishable key. Please set NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY in your environment variables.");
+}
+
+
 
 export default function RootLayout({
   children,
@@ -22,10 +30,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider appearance={{variables: {colorPrimary: "#624cf5"}}}>
-    <html lang="en">
-      <body className={cn("font-IBMPlex antialiased" , IBMPlex.variable)}>{children}</body>
-    </html>
+    <ClerkProvider publishableKey={clerkPublishableKey} appearance={{variables: {colorPrimary: "#624cf5"}}}>
+      <html lang="en">
+        <body className={cn("font-IBMPlex antialiased" , IBMPlex.variable)}>{children}</body>
+      </html>
     </ClerkProvider>
   );
 }
