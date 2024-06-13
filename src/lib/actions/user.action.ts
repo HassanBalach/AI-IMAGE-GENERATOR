@@ -27,7 +27,7 @@ export async function getUserById(userId: string) {
     handleError(error);
   }
 }
-export async function updateUser(updateUser: UpdateUserParams) {
+export async function updateUser(clerkId: string , updateUser: UpdateUserParams) {
   try {
     await connectDatabase();
     const user = await UserModel.findByIdAndUpdate(updateUser, {
@@ -40,10 +40,10 @@ export async function updateUser(updateUser: UpdateUserParams) {
   }
 }
 
-export async function deleteUser() {
+export async function deleteUser(clerkId: string) {
   try {
     await connectDatabase();
-    const userToDelete = await UserModel.findOne();
+    const userToDelete = await UserModel.findOne({clerkId});
     if (!userToDelete) throw new Error("User not find");
     const deleteUser = await UserModel.findByIdAndDelete(userToDelete._id);
     return JSON.parse(JSON.stringify(deleteUser));

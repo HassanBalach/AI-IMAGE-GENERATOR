@@ -1,15 +1,10 @@
-import mongoose ,{Mongoose} from "mongoose";
-import { Document ,ObjectId } from 'mongoose';
-
+import mongoose, { Mongoose } from "mongoose";
+import { Document, ObjectId } from "mongoose";
 
 export interface Cached {
   conn: Mongoose | null;
   promise: Promise<Mongoose> | null;
 }
-  
-  
-
-
 
 export interface IImage extends Document {
   title: string;
@@ -23,14 +18,13 @@ export interface IImage extends Document {
   color: string;
   prompt: string;
   author: {
-    id: string,
-    firstName: string,
-    lastName: string
-  }
+    id: string;
+    firstName: string;
+    lastName: string;
+  };
   createdAt: Date;
   updatedAt: Date;
 }
-
 
 export interface IUser extends Document {
   clerkId: string;
@@ -43,7 +37,6 @@ export interface IUser extends Document {
   creditBalance: number;
 }
 
-
 export interface IPayment extends Document {
   createdAt: Date;
   stripeId: string;
@@ -53,24 +46,23 @@ export interface IPayment extends Document {
   buyer?: ObjectId;
 }
 
-
 /* eslint-disable no-unused-vars */
 
 // ====== USER PARAMS
 export declare type CreateUserParams = {
   clerkId: string;
   email: string;
-  username: string;
-  firstName: string;
-  lastName: string;
+  username: string | null;
+  firstName: string | null;
+  lastName: string | null;
   photo: string;
 };
 
 export declare type UpdateUserParams = {
-  firstName: string;
-  lastName: string;
-  username: string;
-  photo: string;
+  firstName: string | null;
+    lastName: string | null;
+    username: string | null;
+    photo: string;
 };
 
 // ====== IMAGE PARAMS
