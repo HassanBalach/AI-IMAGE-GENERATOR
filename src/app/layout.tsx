@@ -1,28 +1,20 @@
 import type { Metadata } from "next";
-import { IBM_Plex_Mono } from "next/font/google";
-import { ClerkProvider } from "@clerk/nextjs";
-import "./globals.css";
+import { IBM_Plex_Sans } from "next/font/google";
 import { cn } from "@/lib/utils";
+import { ClerkProvider } from "@clerk/nextjs";
 
+import "./globals.css";
 
-const IBMPlex = IBM_Plex_Mono({ 
+const IBMPlex = IBM_Plex_Sans({ 
   subsets: ["latin"],
-  weight:["400", "500", "600", "700"], 
+  weight: ['400', '500', '600', '700'],
   variable: '--font-ibm-plex'
 });
 
 export const metadata: Metadata = {
   title: "Imaginify",
-  description: "AI-powered AI Generator",
+  description: "AI-powered image generator",
 };
- 
-const clerkPublishableKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
-
-if (!clerkPublishableKey) {
-  throw new Error("Missing Clerk publishable key. Please set NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY in your environment variables.");
-}
-
-
 
 export default function RootLayout({
   children,
@@ -30,9 +22,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <ClerkProvider publishableKey={clerkPublishableKey} appearance={{variables: {colorPrimary: '#624cf5'}}}>
+    <ClerkProvider appearance={{
+      variables: { colorPrimary: '#624cf5' }
+    }}>
       <html lang="en">
-        <body className={cn("font-IBMPlex antialiased" , IBMPlex.variable)}>{children}</body>
+        <body className={cn("font-IBMPlex antialiased", IBMPlex.variable)}>
+          {children}
+        </body>
       </html>
     </ClerkProvider>
   );
