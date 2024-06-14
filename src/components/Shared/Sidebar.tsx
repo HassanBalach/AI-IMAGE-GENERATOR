@@ -10,6 +10,8 @@ import { navLinks } from '../../../constants'
 
 const Sidebar = () => {
   const pathname = usePathname();
+  console.log("pathname:" , pathname);
+  
 
   return (
     <aside className="sidebar">
@@ -64,7 +66,7 @@ const Sidebar = () => {
                     </Link>
                   </li>
                 )
-              })}
+              })} 
 
               <li className="flex-center cursor-pointer gap-2 p-4">
                 <UserButton afterSignOutUrl='/' showName />
