@@ -108,7 +108,7 @@ export async function POST(req: Request) {
 
     const { id } = evt.data;
     try {
-      const deletedUser = await deleteUser(id);
+      const deletedUser = await deleteUser(id!);
       console.log("User deleted:", deletedUser);
       return NextResponse.json({ message: "OK", user: deletedUser });
     } catch (error) {

@@ -1,68 +1,76 @@
 "use server";
 
-import { CreateUserParams, UpdateUserParams } from "../../../Types";
-import { connectDatabase } from "../database/MongoDB";
-import UserModel from "../database/models/user.model";
-import { handleError } from "../utils";
+import { revalidatePath } from "next/cache";
 
+import User from "../database/models/user.model";
+import { connectDatabase } from "../database/MongoDB";
+import { handleError } from "../utils";
+import { CreateUserParams, UpdateUserParams } from "../../../Types";
+
+// CREATE
 export async function createUser(user: CreateUserParams) {
   try {
     await connectDatabase();
-    console.log("User param in createUser:", user);
 
-    const newUser = await UserModel.create(user);
-    console.log("newUser is being added successfully:", newUser);
+    const newUser = await User.create(user);
 
     return JSON.parse(JSON.stringify(newUser));
   } catch (error) {
-    console.error("Error in createUser:", error);
     handleError(error);
-    return null;  // Ensuring a response is always returned
   }
 }
 
+// READ
 export async function getUserById(userId: string) {
   try {
     await connectDatabase();
-    console.log("Fetching user with ID:", userId);
-    const user = await UserModel.findOne({ clerkId: userId });
-    if (!user) throw new Error("User does not exist");
-    console.log("User found:", user);
+
+    const user = await User.findOne({ clerkId: userId });
+
+    if (!user) throw new Error("User not found");
+
     return JSON.parse(JSON.stringify(user));
   } catch (error) {
-    console.error("Error in getUserById:", error);
     handleError(error);
-    return null;  // Ensuring a response is always returned
   }
 }
 
-export async function updateUser(clerkId: string, updateUser: UpdateUserParams) {
+// UPDATE
+export async function updateUser(clerkId: string, user: UpdateUserParams) {
   try {
     await connectDatabase();
-    console.log("Updating user with clerkId:", clerkId);
-    const user = await UserModel.findOneAndUpdate({ clerkId }, updateUser, { new: true });
-    if (!user) throw new Error("User update failed");
-    console.log("User updated:", user);
-    return JSON.parse(JSON.stringify(user));
+
+    const updatedUser = await User.findOneAndUpdate({ clerkId }, user, {
+      new: true,
+    });
+
+    if (!updatedUser) throw new Error("User update failed");
+    
+    return JSON.parse(JSON.stringify(updatedUser));
   } catch (error) {
-    console.error("Error in updateUser:", error);
     handleError(error);
-    return null;  // Ensuring a response is always returned
   }
 }
 
-export async function deleteUser(clerkId: string | undefined) {
+// DELETE
+export async function deleteUser(clerkId: string) {
   try {
     await connectDatabase();
-    console.log("Deleting user with clerkId:", clerkId);
-    const userToDelete = await UserModel.findOne({ clerkId });
-    if (!userToDelete) throw new Error("User not found");
-    const deleteUser = await UserModel.findByIdAndDelete(userToDelete._id);
-    console.log("User deleted:", deleteUser);
-    return JSON.parse(JSON.stringify(deleteUser));
+
+    // Find user to delete
+    const userToDelete = await User.findOne({ clerkId });
+
+    if (!userToDelete) {
+      throw new Error("User not found");
+    }
+
+    // Delete user
+    const deletedUser = await User.findByIdAndDelete(userToDelete._id);
+    revalidatePath("/");
+
+    return deletedUser ? JSON.parse(JSON.stringify(deletedUser)) : null;
   } catch (error) {
-    console.error("Error in deleteUser:", error);
     handleError(error);
-    return null;  // Ensuring a response is always returned
   }
 }
+
